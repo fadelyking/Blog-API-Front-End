@@ -74,7 +74,7 @@ export default function SignIn() {
         </form>
         <div className="div">
           Don't have an account?{"  "}
-          <a href="./Sign-up" className="underline">
+          <a href="./sign-up" className="underline">
             Sign up!
           </a>
         </div>
