@@ -2,7 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import SignIn from "./Sign-in";
 import Home from "./Homepage";
 import { useEffect, useState } from "react";
-
+import SignUp from "./Sign-up";
 export default function Router() {
   const [blogs, setBlogs] = useState();
   const [users, setUsers] = useState();
@@ -44,6 +44,10 @@ export default function Router() {
     {
       path: "/sign-in",
       element: <SignIn />,
+    },
+    {
+      path: "/sign-up",
+      element: <SignUp />,
     },
   ]);
 
