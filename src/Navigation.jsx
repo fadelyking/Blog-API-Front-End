@@ -5,7 +5,7 @@ export default function NavBar() {
         <div className="logo">Blog</div>
         <div className=" flex gap-6">
           <div className="Log in">
-            <a href="./Sign-in">Login</a>
+            <a href="./sign-in">Login</a>
           </div>
           <div className="dashboard">Dashboard</div>
         </div>
