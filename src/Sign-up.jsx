@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import NavBar from "./Navigation";
-
+import { v4 as uuidv4 } from "uuid";
 function SignUp() {
   const [credentials, setCredentials] = useState({
     first_name: "",
@@ -9,9 +9,40 @@ function SignUp() {
     password: "",
     confirm_password: "",
   });
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState([]);
 
-  function handleSubmit() {}
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      let res = await fetch("http://localhost:3000/user/sign-up", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ credentials }),
+      });
+      let resJson = await res.json();
+
+      if (res === 200) {
+        setCredentials({
+          ...credentials,
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: "",
+          confirm_password: "",
+        });
+      } else {
+        const errorMsg = document.querySelector(".hidden");
+        errorMsg.style.display = "block";
+        const newMessage = message.slice();
+        resJson.error.map((err) => {
+          newMessage.push(err.msg);
+        });
+        setMessage(newMessage);
+      }
+    } catch (err) {
+      console.log("failed to fetch");
+    }
+  }
   return (
     <>
       <NavBar></NavBar>
@@ -19,7 +50,13 @@ function SignUp() {
         <div className="text-3xl p-5 font-bold">
           Join the bloggers community
         </div>
-        <div className=" mb-2 bg-red-400 p-3 rounded-sm hidden ">{message}</div>
+        <div className=" mb-2 bg-red-400 p-3 rounded-sm hidden">
+          <ul>
+            {message.map((msg, i) => (
+              <li key={i}>{msg}</li>
+            ))}
+          </ul>
+        </div>
         <form
           onSubmit={handleSubmit}
           className=" flex flex-col gap-10"
@@ -63,7 +100,7 @@ function SignUp() {
             className="drop-shadow-sm border-b-2 border-gray-500 p-2 outline-none"
             value={credentials.password}
             onChange={(e) =>
-              setPassword({ ...credentials, password: e.target.value })
+              setCredentials({ ...credentials, password: e.target.value })
             }
           />
           <input
@@ -73,7 +110,10 @@ function SignUp() {
             className="drop-shadow-sm border-b-2 border-gray-500 p-2 outline-none"
             value={credentials.confirm_password}
             onChange={(e) =>
-              setPassword({ ...credentials, password: e.target.value })
+              setCredentials({
+                ...credentials,
+                confirm_password: e.target.value,
+              })
             }
           />
           <button
